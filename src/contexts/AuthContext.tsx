@@ -1,3 +1,4 @@
+// src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authService } from '../services/api';
 import Cookies from 'js-cookie';
@@ -39,13 +40,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = React.memo(({ children 
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
-      // Verify token and get user info
       authService.getProfile()
         .then(userData => {
           setUser(userData);
         })
         .catch(() => {
           Cookies.remove('token');
+          setUser(null);
         })
         .finally(() => {
           setIsLoading(false);
@@ -56,23 +57,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = React.memo(({ children 
   }, []);
 
   const login = async (email: string, password: string) => {
-    try {
-      const response = await authService.login(email, password);
-      setUser(response.user);
-      Cookies.set('token', response.token, { expires: 7 });
-    } catch (error) {
-      throw error;
-    }
+    const response = await authService.login(email, password);
+    setUser(response.user);
+    Cookies.set('token', response.token, { expires: 7 });
   };
 
   const register = async (name: string, email: string, password: string) => {
-    try {
-      const response = await authService.register(name, email, password);
-      setUser(response.user);
-      Cookies.set('token', response.token, { expires: 7 });
-    } catch (error) {
-      throw error;
-    }
+    const response = await authService.register(name, email, password);
+    setUser(response.user);
+    Cookies.set('token', response.token, { expires: 7 });
   };
 
   const logout = () => {
@@ -86,7 +79,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = React.memo(({ children 
     login,
     register,
     logout,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
   };
 
   return (

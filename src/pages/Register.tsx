@@ -18,17 +18,17 @@ const Register: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const { register: registerUser } = useAuth();
   const navigate = useNavigate();
-  
+
   const { register, handleSubmit, formState: { errors }, watch } = useForm<RegisterForm>();
   const password = watch('password');
 
   const onSubmit = async (data: RegisterForm) => {
     setIsLoading(true);
     setError('');
-    
+
     try {
       await registerUser(data.name, data.email, data.password);
       navigate('/dashboard');
@@ -210,8 +210,8 @@ const Register: React.FC = () => {
           <div className="mt-8 text-center">
             <p className="text-white/70">
               Already have an account?{' '}
-              <Link 
-                to="/login" 
+              <Link
+                to="/login"
                 className="text-primary-400 hover:text-primary-300 font-medium transition-colors duration-200"
               >
                 Sign in here

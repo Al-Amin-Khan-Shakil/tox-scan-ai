@@ -30,13 +30,14 @@ app.use(helmet({
       scriptSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "blob:", "https:"],
       connectSrc: ["'self'", "https://generativelanguage.googleapis.com"],
+      workerSrc: ["'self'", "blob:"],
     },
   },
 }));
 
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL 
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.FRONTEND_URL
     : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true
 }));
@@ -76,7 +77,7 @@ const startServer = async () => {
   try {
     await initDatabase();
     console.log('✅ Database initialized successfully');
-    
+
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Health check: http://localhost:${PORT}/api/health`);

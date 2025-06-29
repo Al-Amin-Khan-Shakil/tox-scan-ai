@@ -1,6 +1,6 @@
 # AI Ingredient Analyzer
 
-A full-stack Web App that uses AI to analyze ingredient lists from product images, detect harmful substances, and provide safety recommendations.
+A full-stack Progressive Web App that uses AI to analyze ingredient lists from product images, detect harmful substances, and provide safety recommendations.
 
 ## Features
 
@@ -18,6 +18,7 @@ A full-stack Web App that uses AI to analyze ingredient lists from product image
 - **Analysis History**: Track and review all previous analyses
 
 ### Technical Features
+- **Progressive Web App (PWA)**: Installable, offline-capable
 - **Responsive Design**: Mobile-first glassmorphism UI
 - **Authentication**: Secure JWT-based user accounts
 - **Real-time Analysis**: Live progress updates during processing

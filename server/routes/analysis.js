@@ -1,20 +1,13 @@
 import express from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
-import path from 'path';
-import fs from 'fs/promises';
-import { fileURLToPath } from 'url';
 import Tesseract from 'tesseract.js';
-import { GoogleAuth } from 'google-auth-library';
 import pool from '../database/init.js';
 import { authenticateToken } from '../middleware/auth.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const router = express.Router();
 
-// Configure multer for file uploads
+// Configure multer for file uploads (in-memory storage)
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
@@ -30,14 +23,6 @@ const upload = multer({
     }
   },
 });
-
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, '../uploads');
-try {
-  await fs.access(uploadsDir);
-} catch {
-  await fs.mkdir(uploadsDir, { recursive: true });
-}
 
 // OCR function using Tesseract.js
 const extractTextFromImage = async (imageBuffer) => {
@@ -193,21 +178,11 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
     // Analyze with Google AI
     const aiAnalysis = await analyzeWithGoogleAI(extractedText);
 
-    // Save processed image
-    const imageFilename = `${Date.now()}-${req.user.userId}.webp`;
-    const imagePath = path.join(uploadsDir, imageFilename);
-
-    await sharp(req.file.buffer)
-      .webp({ quality: 80 })
-      .toFile(imagePath);
-
-    const imageUrl = `/uploads/${imageFilename}`;
-
     // Detect if translation was performed (simple heuristic)
     const translatedText = aiAnalysis.fullAnalysis.includes('Translation:') ?
       extractedText : null;
 
-    // Save analysis to database
+    // Save analysis to database without image URL
     const result = await pool.query(`
       INSERT INTO analyses (user_id, original_text, translated_text, analysis, recommendations, risk_level, image_url)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -219,7 +194,7 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
       aiAnalysis.fullAnalysis,
       aiAnalysis.recommendations,
       aiAnalysis.riskLevel,
-      imageUrl
+      null // Set image_url to null
     ]);
 
     const analysis = result.rows[0];

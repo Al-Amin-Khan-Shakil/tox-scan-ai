@@ -1,4 +1,3 @@
-// vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -10,50 +9,39 @@ export default defineConfig({
       registerType: 'autoUpdate',
       strategies: 'generateSW',
       devOptions: {
-        enabled: true, // Enables dev-dist folder
+        enabled: true // Enables service worker in development
       },
       includeAssets: ['m-logo.png'],
       manifest: {
-        name: 'AI Ingredient Analyzer',
+        name: 'ToxScan AI',
         short_name: 'ToxScan AI',
         description: 'Analyze ingredients with AI to detect harmful substances in food, cosmetics, and household products',
         theme_color: '#14B8A6',
-        background_color: '#0F172A',
+        background_color: '#ffffff',
         display: 'standalone',
-        orientation: 'portrait',
         scope: '/',
         start_url: '/',
         icons: [
           {
             src: '/m-logo.png',
-            sizes: '64x64 32x32 24x24 16x16',
-            type: 'image/x-icon',
-          },
-          {
-            src: '/m-logo.png',
             sizes: '192x192',
-            type: 'image/png',
+            type: 'image/png'
+          },
+          {
+            src: '/m-logo.png',
+            sizes: '512x512',
+            type: 'image/png'
           },
           {
             src: '/m-logo.png',
             sizes: '512x512',
             type: 'image/png',
-          },
-          {
-            src: '/m-logo.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable',
-          },
-          {
-            src: '/m-logo.png',
-            sizes: '180x180',
-            type: 'image/png',
-          },
-        ],
+            purpose: 'any maskable'
+          }
+        ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,jsx,ts,tsx,css,html,ico,png,svg}'],
+        globPatterns: ['**/*.{js,jsx,ts,tsx,css,html,png,svg}'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/generativelanguage\.googleapis\.com\/.*/i,
@@ -62,26 +50,26 @@ export default defineConfig({
               cacheName: 'google-api-cache',
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+                maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
               },
               cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-        ],
-      },
-    }),
+                statuses: [0, 200]
+              }
+            }
+          }
+        ]
+      }
+    })
   ],
   optimizeDeps: {
-    exclude: ['lucide-react'],
+    exclude: ['lucide-react']
   },
   server: {
     proxy: {
       '/api': {
-        target: 'http://toxscan-ai.onrender.com',
-        changeOrigin: true,
-      },
-    },
-  },
+        target:'https://toxscan-ai.onrender.com',
+        changeOrigin: true
+      }
+    }
+  }
 });

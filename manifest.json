@@ -2,25 +2,27 @@
   "name": "ToxScan AI",
   "short_name": "ToxScan AI",
   "description": "Analyze ingredients with AI to detect harmful substances in food, cosmetics, and household products",
+  "theme_color": "#14B8A6",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
   "icons": [
     {
       "src": "/m-logo.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
       "src": "/m-logo.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "512x512",
+      "type": "image/png"
     },
     {
       "src": "/m-logo.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "sizes": "512x512"
+      "purpose": "any maskable"
     }
-  ],
-  "start_url": "/",
-  "display": "standalone",
-  "theme_color": "#14B8A6",
-  "background_color": "#ffffff"
+  ]
 }

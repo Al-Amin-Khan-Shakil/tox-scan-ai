@@ -30,10 +30,11 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"], // Allow inline scripts for service worker
       imgSrc: ["'self'", "data:", "blob:", "https:"],
       connectSrc: ["'self'", "https://generativelanguage.googleapis.com", process.env.FRONTEND_URL || "https://toxscan-ai.onrender.com"],
       workerSrc: ["'self'", "blob:"],
+      manifestSrc: ["'self'"], // Allow manifest.json
     },
   },
   crossOriginResourcePolicy: { policy: 'cross-origin' }
@@ -51,7 +52,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
 
 // API Routes
 app.use('/api/auth', authRoutes);

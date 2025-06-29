@@ -12,7 +12,7 @@ export default defineConfig({
       devOptions: {
         enabled: true, // Enables dev-dist folder
       },
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png'],
+      includeAssets: ['m-logo.png'],
       manifest: {
         name: 'AI Ingredient Analyzer',
         short_name: 'ToxScan AI',
@@ -25,28 +25,28 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/favicon.ico',
+            src: '/m-logo.png',
             sizes: '64x64 32x32 24x24 16x16',
             type: 'image/x-icon',
           },
           {
-            src: '/pwa-192x192.png',
+            src: '/m-logo.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/pwa-512x512.png',
+            src: '/m-logo.png',
             sizes: '512x512',
             type: 'image/png',
           },
           {
-            src: '/pwa-512x512.png',
+            src: '/m-logo.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable',
           },
           {
-            src: '/apple-touch-icon.png',
+            src: '/m-logo.png',
             sizes: '180x180',
             type: 'image/png',
           },
@@ -79,7 +79,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://toxscan-ai.onrender.com',
         changeOrigin: true,
       },
     },

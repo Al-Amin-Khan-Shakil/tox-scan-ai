@@ -1,3 +1,4 @@
+// main.js
 import { StrictMode } from 'react';
 import { Workbox } from 'workbox-window';
 import { createRoot } from 'react-dom/client';
@@ -13,6 +14,8 @@ createRoot(document.getElementById('root')!).render(
 // Register service worker
 if ('serviceWorker' in navigator) {
   const wb = new Workbox('/sw.js');
+  let deferredPrompt;
+
   wb.register()
     .then((registration) => {
       console.log('Service Worker registered:', registration);
@@ -21,10 +24,11 @@ if ('serviceWorker' in navigator) {
       console.error('Service Worker registration failed:', error);
     });
 
-  // Optional: Listen for install prompt
+  // Listen for install prompt
   window.addEventListener('beforeinstallprompt', (e) => {
     console.log('Install prompt available:', e);
-    // e.preventDefault(); // Uncomment to defer prompt
-    // Store e for later use if you want to trigger the prompt manually
+    deferredPrompt = e; // Store the event
+    e.preventDefault(); // Prevent the default prompt
+    // You can trigger the prompt later, e.g., with a button: deferredPrompt.prompt()
   });
 }

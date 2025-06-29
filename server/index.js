@@ -21,7 +21,7 @@ import express from 'express';
      const app = express();
      const PORT = process.env.PORT || 3001;
 
-     // Serve static files from the Vite build output (must come before wildcard route)
+     // Serve static files from the Vite build output (must come before other routes)
      app.use(express.static(path.join(__dirname, '../dist')));
 
      // Security middleware
@@ -69,8 +69,11 @@ import express from 'express';
        res.json({ status: 'OK', timestamp: new Date().toISOString() });
      });
 
-     // Serve index.html for all unmatched routes (for client-side routing, placed last)
-     app.get('*', (req, res) => {
+     // Serve index.html for all unmatched routes (exclude static assets)
+     app.get('*', (req, res, next) => {
+       if (req.path.startsWith('/m-logo.png') || req.path.startsWith('/sw.js')) {
+         return next(); // Skip wildcard for specific static files
+       }
        res.sendFile(path.join(__dirname, '../dist', 'index.html'));
      });
 

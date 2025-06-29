@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
+import {
   ArrowLeft,
   Calendar,
   FileImage,
@@ -81,9 +81,9 @@ const AnalysisDetails: React.FC = () => {
         const nextSectionRegex = /\n#{1,3}\s/g;
         nextSectionRegex.lastIndex = headerIndex + header.length;
         const nextMatch = nextSectionRegex.exec(filteredAnalysis);
-        
+
         if (nextMatch) {
-          filteredAnalysis = filteredAnalysis.substring(0, headerIndex) + 
+          filteredAnalysis = filteredAnalysis.substring(0, headerIndex) +
                            filteredAnalysis.substring(nextMatch.index);
         } else {
           filteredAnalysis = filteredAnalysis.substring(0, headerIndex);
@@ -150,7 +150,7 @@ const AnalysisDetails: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <GlassCard className="p-12 text-center">
             <AlertCircle className="h-16 w-16 text-error-400 mx-auto mb-6" />
-            <h2 className="text-2xl font-bold text-white mb-4">Analysis Not Found</h2>
+            <h3 className="text-2xl font-bold text-white mb-4">Analysis Not Found</h3>
             <p className="text-white/70 mb-8">
               {error || 'The requested analysis could not be found.'}
             </p>
@@ -244,29 +244,6 @@ const AnalysisDetails: React.FC = () => {
             </GlassCard>
           </motion.div>
 
-          {/* Image (if available) */}
-          {analysis.imageUrl && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <GlassCard className="p-6">
-                <div className="flex items-center space-x-2 mb-4">
-                  <Eye className="h-5 w-5 text-primary-400" />
-                  <h3 className="text-lg font-semibold text-white">Original Image</h3>
-                </div>
-                <div className="text-center">
-                  <img 
-                    src={analysis.imageUrl} 
-                    alt="Analyzed product" 
-                    className="max-w-full max-h-96 mx-auto rounded-lg shadow-lg"
-                  />
-                </div>
-              </GlassCard>
-            </motion.div>
-          )}
-
           {/* Extracted Text */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -319,7 +296,7 @@ const AnalysisDetails: React.FC = () => {
                 <h3 className="text-lg font-semibold text-white">AI Safety Analysis</h3>
               </div>
               <div className="prose prose-invert max-w-none">
-                <ReactMarkdown 
+                <ReactMarkdown
                   className="text-white/80"
                   components={{
                     h1: ({children}) => <h1 className="text-2xl font-bold text-white mb-4">{children}</h1>,
@@ -349,7 +326,7 @@ const AnalysisDetails: React.FC = () => {
                 <h3 className="text-lg font-semibold text-white">Usage Recommendations</h3>
               </div>
               <div className="prose prose-invert max-w-none">
-                <ReactMarkdown 
+                <ReactMarkdown
                   className="text-white/80"
                   components={{
                     h1: ({children}) => <h1 className="text-2xl font-bold text-white mb-4">{children}</h1>,

@@ -1,14 +1,14 @@
 import React from 'react';
-import { Atom } from 'lucide-react';
+import { Microscope } from 'lucide-react';
 
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg';
   text?: string;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = React.memo(({ 
-  size = 'md', 
-  text = 'Loading...' 
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = React.memo(({
+  size = 'md',
+  text = 'Loading...'
 }) => {
   const sizeClasses = {
     sm: 'h-4 w-4',
@@ -21,7 +21,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = React.memo(({
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-primary rounded-full opacity-20 animate-ping"></div>
         <div className="relative p-4 bg-gradient-primary rounded-full animate-spin">
-          <Atom className={`${sizeClasses[size]} text-white`} />
+          <Microscope className={`${sizeClasses[size]} text-white`} />
         </div>
       </div>
       <p className="text-white/70 text-sm font-medium animate-pulse">{text}</p>

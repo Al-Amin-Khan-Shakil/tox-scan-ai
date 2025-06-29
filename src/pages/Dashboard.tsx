@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Camera, 
-  History, 
-  TrendingUp, 
-  Shield, 
+import {
+  Camera,
+  History,
+  TrendingUp,
+  Shield,
   AlertTriangle,
   CheckCircle,
   ArrowRight,
@@ -34,13 +34,13 @@ const Dashboard: React.FC = () => {
       try {
         const history = await analysisService.getHistory();
         setRecentAnalyses(history);
-        
+
         // Calculate stats
         const totalAnalyses = history.length;
         const safeProducts = history.filter((item: any) => item.riskLevel === 'low').length;
         const warningProducts = history.filter((item: any) => item.riskLevel === 'medium').length;
         const dangerousProducts = history.filter((item: any) => item.riskLevel === 'high').length;
-        
+
         setStats({
           totalAnalyses,
           safeProducts,
@@ -89,9 +89,9 @@ const Dashboard: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="mb-12"
         >
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Welcome back, {user?.name}!
-          </h1>
+          </h2>
           <p className="text-xl text-white/70">
             Here's your ingredient analysis overview
           </p>
@@ -228,9 +228,9 @@ const Dashboard: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.6 }}
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white">Recent Analysis</h2>
+            <h3 className="text-2xl font-bold text-white">Recent Analysis</h3>
             {recentAnalyses.length > 5 && (
-              <Link 
+              <Link
                 to="/recent-analysis"
                 className="text-primary-400 hover:text-primary-300 font-medium transition-colors duration-200"
               >
@@ -242,7 +242,7 @@ const Dashboard: React.FC = () => {
           {recentAnalyses.length === 0 ? (
             <GlassCard className="p-8 text-center">
               <Camera className="h-12 w-12 text-white/40 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">No analyses yet</h3>
+              <h4 className="text-xl font-semibold text-white mb-2">No analyses yet</h4>
               <p className="text-white/70 mb-6">
                 Start by analyzing your first product to see results here
               </p>
@@ -260,7 +260,7 @@ const Dashboard: React.FC = () => {
                 const RiskIcon = getRiskIcon(analysis.riskLevel);
                 return (
                   <Link key={analysis.id} to={`/analysis-details/${analysis.id}`}>
-                    <GlassCard className="p-6 hover:bg-white/15 cursor-pointer transition-all duration-300 transform hover:scale-[1.02]">
+                    <GlassCard className="p-6 hover:bg-white/15 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] mb-2">
                       <div className="flex items-center space-x-4">
                         <div className={`p-2 rounded-lg ${
                           analysis.riskLevel === 'low' ? 'bg-success-600/20' :

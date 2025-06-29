@@ -1,4 +1,4 @@
-# AI Ingredient Analyzer
+# ToxScan AI
 
 A full-stack Progressive Web App that uses AI to analyze ingredient lists from product images, detect harmful substances, and provide safety recommendations.
 

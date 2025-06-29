@@ -1,20 +1,13 @@
 import express from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
-import path from 'path';
-import fs from 'fs/promises';
-import { fileURLToPath } from 'url';
 import Tesseract from 'tesseract.js';
-import { GoogleAuth } from 'google-auth-library';
 import pool from '../database/init.js';
 import { authenticateToken } from '../middleware/auth.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const router = express.Router();
 
-// Configure multer for file uploads
+// Configure multer for file uploads (in-memory storage)
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
@@ -31,19 +24,11 @@ const upload = multer({
   },
 });
 
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, '../uploads');
-try {
-  await fs.access(uploadsDir);
-} catch {
-  await fs.mkdir(uploadsDir, { recursive: true });
-}
-
 // OCR function using Tesseract.js
 const extractTextFromImage = async (imageBuffer) => {
   try {
     console.log('Starting OCR process...');
-    
+
     // Process image with Sharp for better OCR results
     const processedImage = await sharp(imageBuffer)
       .greyscale()
@@ -73,7 +58,7 @@ const analyzeWithGoogleAI = async (text) => {
     }
 
     const prompt = `
-As an expert toxicologist and ingredient safety analyst, analyze the following ingredient list for potential health risks. 
+As an expert toxicologist and ingredient safety analyst, analyze the following ingredient list for potential health risks.
 
 Ingredient List:
 "${text}"
@@ -104,6 +89,7 @@ Provide an overall risk level: LOW, MEDIUM, or HIGH based on:
 - Severity of potential effects
 - Concentration levels (if determinable)
 - Cumulative effects
+- Risk levels should be consistently displayed in the format "Risk Level: [LOW/MEDIUM/HIGH]"
 
 ## Usage Recommendations
 Provide specific guidance on:
@@ -115,7 +101,7 @@ Provide specific guidance on:
 Be thorough but clear, and base your analysis on current scientific understanding and regulatory guidelines from agencies like FDA, EPA, and international health organizations.
 `;
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -143,18 +129,19 @@ Be thorough but clear, and base your analysis on current scientific understandin
 
     const data = await response.json();
     const analysis = data.candidates[0]?.content?.parts[0]?.text;
-    
+    console.log('AI Analysis received:', analysis);
+
     if (!analysis) {
       throw new Error('No analysis received from AI');
     }
 
     // Parse the analysis to extract risk level and recommendations
-    const riskLevel = analysis.toLowerCase().includes('risk level: high') || analysis.toLowerCase().includes('high risk') ? 'high' :
-                     analysis.toLowerCase().includes('risk level: medium') || analysis.toLowerCase().includes('medium risk') ? 'medium' : 'low';
+    const riskLevel = analysis.toLowerCase().includes('risk level: **high**') || analysis.toLowerCase().includes('risk level: high') || analysis.toLowerCase().includes('high risk') ? 'high' :
+                 analysis.toLowerCase().includes('risk level: **medium**') || analysis.toLowerCase().includes('risk level: medium') || analysis.toLowerCase().includes('medium risk') ? 'medium' : 'low';
 
     // Extract recommendations section
     const recommendationsMatch = analysis.match(/## Usage Recommendations([\s\S]*?)(?=##|$)/i);
-    const recommendations = recommendationsMatch ? recommendationsMatch[1].trim() : 
+    const recommendations = recommendationsMatch ? recommendationsMatch[1].trim() :
       'Please consult with healthcare professionals for personalized advice regarding product safety.';
 
     return {
@@ -179,10 +166,10 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
 
     // Extract text from image using OCR
     const extractedText = await extractTextFromImage(req.file.buffer);
-    
+
     if (!extractedText || extractedText.length < 10) {
-      return res.status(400).json({ 
-        message: 'Could not extract sufficient text from image. Please ensure the image is clear and contains readable ingredient text.' 
+      return res.status(400).json({
+        message: 'Could not extract sufficient text from image. Please ensure the image is clear and contains readable ingredient text.'
       });
     }
 
@@ -191,21 +178,11 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
     // Analyze with Google AI
     const aiAnalysis = await analyzeWithGoogleAI(extractedText);
 
-    // Save processed image
-    const imageFilename = `${Date.now()}-${req.user.userId}.webp`;
-    const imagePath = path.join(uploadsDir, imageFilename);
-    
-    await sharp(req.file.buffer)
-      .webp({ quality: 80 })
-      .toFile(imagePath);
-
-    const imageUrl = `/uploads/${imageFilename}`;
-
     // Detect if translation was performed (simple heuristic)
-    const translatedText = aiAnalysis.fullAnalysis.includes('Translation:') ? 
+    const translatedText = aiAnalysis.fullAnalysis.includes('Translation:') ?
       extractedText : null;
 
-    // Save analysis to database
+    // Save analysis to database without image URL
     const result = await pool.query(`
       INSERT INTO analyses (user_id, original_text, translated_text, analysis, recommendations, risk_level, image_url)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -217,7 +194,7 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
       aiAnalysis.fullAnalysis,
       aiAnalysis.recommendations,
       aiAnalysis.riskLevel,
-      imageUrl
+      null // Set image_url to null
     ]);
 
     const analysis = result.rows[0];
@@ -235,8 +212,8 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
 
   } catch (error) {
     console.error('Analysis error:', error);
-    res.status(500).json({ 
-      message: error.message || 'Failed to analyze image. Please try again.' 
+    res.status(500).json({
+      message: error.message || 'Failed to analyze image. Please try again.'
     });
   }
 });
@@ -246,8 +223,8 @@ router.get('/history', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT id, original_text, translated_text, analysis, recommendations, risk_level, image_url, created_at
-      FROM analyses 
-      WHERE user_id = $1 
+      FROM analyses
+      WHERE user_id = $1
       ORDER BY created_at DESC
       LIMIT 50
     `, [req.user.userId]);
@@ -275,7 +252,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT id, original_text, translated_text, analysis, recommendations, risk_level, image_url, created_at
-      FROM analyses 
+      FROM analyses
       WHERE id = $1 AND user_id = $2
     `, [req.params.id, req.user.userId]);
 

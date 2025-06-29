@@ -1,96 +1,102 @@
 import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import compression from 'compression';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+     import cors from 'cors';
+     import helmet from 'helmet';
+     import compression from 'compression';
+     import dotenv from 'dotenv';
+     import path from 'path';
+     import { fileURLToPath } from 'url';
 
-// Route imports
-import authRoutes from './routes/auth.js';
-import analysisRoutes from './routes/analysis.js';
+     // Route imports
+     import authRoutes from './routes/auth.js';
+     import analysisRoutes from './routes/analysis.js';
 
-// Database
-import { initDatabase } from './database/init.js';
+     // Database
+     import { initDatabase } from './database/init.js';
 
-dotenv.config();
+     dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+     const __filename = fileURLToPath(import.meta.url);
+     const __dirname = path.dirname(__filename);
 
-const app = express();
-const PORT = process.env.PORT || 3001;
+     const app = express();
+     const PORT = process.env.PORT || 3001;
 
-// Serve static files from the Vite build output
-app.use(express.static(path.join(__dirname, '../dist')));
+     // Serve static files from the Vite build output (must come before wildcard route)
+     app.use(express.static(path.join(__dirname, '../dist')));
 
-// Security middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"], // Allow inline scripts for service worker
-      imgSrc: ["'self'", "data:", "blob:", "https:"],
-      connectSrc: ["'self'", "https://generativelanguage.googleapis.com", process.env.FRONTEND_URL || "https://toxscan-ai.onrender.com"],
-      workerSrc: ["'self'", "blob:"],
-      manifestSrc: ["'self'"], // Allow manifest.json
-    },
-  },
-  crossOriginResourcePolicy: { policy: 'cross-origin' }
-}));
+     // Security middleware
+     app.use(helmet({
+       contentSecurityPolicy: {
+         directives: {
+           defaultSrc: ["'self'"],
+           styleSrc: ["'self'", "'unsafe-inline'"],
+           scriptSrc: ["'self'", "'unsafe-eval'", "'unsafe-inline'"],
+           imgSrc: ["'self'", "data:", "blob:", "https:"],
+           connectSrc: ["'self'", "https://generativelanguage.googleapis.com", process.env.FRONTEND_URL || "https://toxscan-ai.onrender.com"],
+           workerSrc: ["'self'", "blob:"],
+           manifestSrc: ["'self'"]
+         }
+       },
+       crossOriginResourcePolicy: { policy: 'cross-origin' }
+     }));
 
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? process.env.FRONTEND_URL || 'https://toxscan-ai.onrender.com'
-    : ['http://localhost:5173', 'http://localhost:3000'],
-  credentials: true
-}));
+     app.use(cors({
+       origin: process.env.NODE_ENV === 'production'
+         ? process.env.FRONTEND_URL || 'https://toxscan-ai.onrender.com'
+         : ['http://localhost:5173', 'http://localhost:3000'],
+       credentials: true
+     }));
 
-app.use(compression());
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+     app.use(compression());
+     app.use(express.json({ limit: '10mb' }));
+     app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
+     // Serve uploaded files
+     app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/analysis', analysisRoutes);
+     // Serve manifest.json explicitly
+     app.get('/manifest.json', (req, res) => {
+       res.setHeader('Content-Type', 'application/manifest+json');
+       res.sendFile(path.join(__dirname, '../dist', 'manifest.json'));
+     });
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
+     // API Routes
+     app.use('/api/auth', authRoutes);
+     app.use('/api/analysis', analysisRoutes);
 
-// Serve index.html for all unmatched routes (for client-side routing)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
-});
+     // Health check
+     app.get('/api/health', (req, res) => {
+       res.json({ status: 'OK', timestamp: new Date().toISOString() });
+     });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(err.status || 500).json({
-    message: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-});
+     // Serve index.html for all unmatched routes (for client-side routing, placed last)
+     app.get('*', (req, res) => {
+       res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+     });
 
-// Initialize database and start server
-const startServer = async () => {
-  try {
-    await initDatabase();
-    console.log('✅ Database initialized successfully');
+     // Error handling middleware
+     app.use((err, req, res, next) => {
+       console.error('Error:', err);
+       res.status(err.status || 500).json({
+         message: err.message || 'Internal server error',
+         ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+       });
+     });
 
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
-    });
-  } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
-  }
-};
+     // Initialize database and start server
+     const startServer = async () => {
+       try {
+         await initDatabase();
+         console.log('✅ Database initialized successfully');
 
-startServer();
+         app.listen(PORT, () => {
+           console.log(`🚀 Server running on port ${PORT}`);
+           console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
+         });
+       } catch (error) {
+         console.error('❌ Failed to start server:', error);
+         process.exit(1);
+       }
+     };
+
+     startServer();

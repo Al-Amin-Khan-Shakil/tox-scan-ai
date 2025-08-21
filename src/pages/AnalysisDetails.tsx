@@ -303,8 +303,15 @@ const AnalysisDetails: React.FC = () => {
                     h2: ({children}) => <h2 className="text-xl font-bold text-white mb-3">{children}</h2>,
                     h3: ({children}) => <h3 className="text-lg font-bold text-white mb-2">{children}</h3>,
                     p: ({children}) => <p className="text-white/80 mb-3 leading-relaxed">{children}</p>,
-                    ul: ({children}) => <ul className="list-disc list-inside space-y-1 mb-3">{children}</ul>,
-                    li: ({children}) => <li className="text-white/80">{children}</li>,
+                    ul: ({children}) => (
+                      <ul className="list-disc pl-6 mb-3 space-y-1">{children}</ul>   // <-- FIXED
+                    ),
+                    ol: ({children}) => (
+                      <ol className="list-decimal pl-6 mb-3 space-y-1">{children}</ol> // <-- ADDED for ordered lists
+                    ),
+                    li: ({children}) => (
+                      <li className="text-white/80 ml-2">{children}</li>               // <-- FIXED indentation
+                    ),
                     strong: ({children}) => <strong className="text-white font-semibold">{children}</strong>,
                   }}
                 >
@@ -333,8 +340,15 @@ const AnalysisDetails: React.FC = () => {
                     h2: ({children}) => <h2 className="text-xl font-bold text-white mb-3">{children}</h2>,
                     h3: ({children}) => <h3 className="text-lg font-bold text-white mb-2">{children}</h3>,
                     p: ({children}) => <p className="text-white/80 mb-3 leading-relaxed">{children}</p>,
-                    ul: ({children}) => <ul className="list-disc list-inside space-y-1 mb-3">{children}</ul>,
-                    li: ({children}) => <li className="text-white/80">{children}</li>,
+                    ul: ({children}) => (
+                      <ul className="list-disc pl-6 mb-3 space-y-1">{children}</ul>   // <-- FIXED
+                    ),
+                    ol: ({children}) => (
+                      <ol className="list-decimal pl-6 mb-3 space-y-1">{children}</ol> // <-- ADDED for ordered lists
+                    ),
+                    li: ({children}) => (
+                      <li className="text-white/80 ml-2">{children}</li>               // <-- FIXED indentation
+                    ),
                     strong: ({children}) => <strong className="text-white font-semibold">{children}</strong>,
                   }}
                 >

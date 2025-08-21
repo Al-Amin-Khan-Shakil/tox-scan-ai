@@ -63,25 +63,25 @@ As an expert toxicologist and ingredient safety analyst, analyze the following i
 Ingredient List:
 "${text}"
 
-Please provide a comprehensive analysis in the following format:
+Please respond in clear **Markdown** format with following numbered sections:
 
 ## Language Detection & Translation
 First, identify the language of the ingredient list. If it's not in English, provide an accurate English translation.
 
 ## Ingredient Safety Analysis
 Analyze each ingredient for potential health risks including:
-- Carcinogens
-- Neurotoxins
-- Hormone disruptors
-- Allergens
-- Substances harmful when overused
-- Any other safety concerns
+1. Carcinogens
+2. Neurotoxins
+3. Hormone disruptors
+4. Allergens
+5. Substances harmful when overused
+6. Any other safety concerns
 
 For each concerning ingredient, explain:
-- What it is and its purpose
-- Why it's potentially harmful
-- Scientific evidence/sources (mention specific studies or regulatory findings when possible)
-- Groups at higher risk (children, pregnant women, etc.)
+1. What it is and its purpose
+2. Why it's potentially harmful
+3. Scientific evidence/sources (mention specific studies or regulatory findings when possible)
+4. Groups at higher risk (children, pregnant women, etc.)
 
 ## Risk Assessment
 Provide an overall risk level: LOW, MEDIUM, or HIGH based on:

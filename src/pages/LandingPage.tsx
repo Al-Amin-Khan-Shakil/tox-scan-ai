@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import GlassCard from '../components/GlassCard';
 import { useAuth } from '../contexts/AuthContext';
-import BoltBadge from '../assets/white_circle_360x360.png';
 
 const LandingPage: React.FC = () => {
   const { isAuthenticated } = useAuth();

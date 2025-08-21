@@ -58,48 +58,48 @@ const analyzeWithGoogleAI = async (text) => {
     }
 
     const prompt = `
-As an expert toxicologist and ingredient safety analyst, analyze the following ingredient list for potential health risks.
+      As an expert toxicologist and ingredient safety analyst, analyze the following ingredient list for potential health risks.
 
-Ingredient List:
-"${text}"
+      Ingredient List:
+      "${text}"
 
-Please provide a comprehensive analysis in the following format:
+      Please respond in clear **Markdown** format with following numbered sections:
 
-## Language Detection & Translation
-First, identify the language of the ingredient list. If it's not in English, provide an accurate English translation.
+      ## Language Detection & Translation
+      First, identify the language of the ingredient list. If it's not in English, provide an accurate English translation.
 
-## Ingredient Safety Analysis
-Analyze each ingredient for potential health risks including:
-- Carcinogens
-- Neurotoxins
-- Hormone disruptors
-- Allergens
-- Substances harmful when overused
-- Any other safety concerns
+      ## Ingredient Safety Analysis
+      Analyze each ingredient for potential health risks including:
+      1. Carcinogens
+      2. Neurotoxins
+      3. Hormone disruptors
+      4. Allergens
+      5. Substances harmful when overused
+      6. Any other safety concerns
 
-For each concerning ingredient, explain:
-- What it is and its purpose
-- Why it's potentially harmful
-- Scientific evidence/sources (mention specific studies or regulatory findings when possible)
-- Groups at higher risk (children, pregnant women, etc.)
+      For each concerning ingredient, explain:
+      1. What it is and its purpose
+      2. Why it's potentially harmful
+      3. Scientific evidence/sources (mention specific studies or regulatory findings when possible)
+      4. Groups at higher risk (children, pregnant women, etc.)
 
-## Risk Assessment
-Provide an overall risk level: LOW, MEDIUM, or HIGH based on:
-- Number of concerning ingredients
-- Severity of potential effects
-- Concentration levels (if determinable)
-- Cumulative effects
-- Risk levels should be consistently displayed in the format "Risk Level: [LOW/MEDIUM/HIGH]"
+      ## Risk Assessment
+      Provide an overall risk level: LOW, MEDIUM, or HIGH based on:
+      - Number of concerning ingredients
+      - Severity of potential effects
+      - Concentration levels (if determinable)
+      - Cumulative effects
+      - Risk levels should be consistently displayed in the format "Risk Level: [LOW/MEDIUM/HIGH]"
 
-## Usage Recommendations
-Provide specific guidance on:
-- Whether the product is safe for general use
-- Any usage limitations or precautions
-- Specific warnings for vulnerable populations
-- Alternative product suggestions if applicable
+      ## Usage Recommendations
+      Provide specific guidance on:
+      - Whether the product is safe for general use
+      - Any usage limitations or precautions
+      - Specific warnings for vulnerable populations
+      - Alternative product suggestions if applicable
 
-Be thorough but clear, and base your analysis on current scientific understanding and regulatory guidelines from agencies like FDA, EPA, and international health organizations.
-`;
+      Be thorough but clear, and base your analysis on current scientific understanding and regulatory guidelines from agencies like FDA, EPA, and international health organizations.
+      `;
 
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
       method: 'POST',

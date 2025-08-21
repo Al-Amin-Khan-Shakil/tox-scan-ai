@@ -16,7 +16,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { useAuth } from '../contexts/AuthContext';
 import { useAnalysis } from '../contexts/AnalysisContext';
 import { analysisService } from '../services/api';
-import BoltBadge from '../assets/white_circle_360x360.png';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();

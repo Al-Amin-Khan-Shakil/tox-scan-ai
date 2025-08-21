@@ -1,4 +1,4 @@
-# AI Ingredient Analyzer
+# ToxScan AI
 
 A full-stack Progressive Web App that uses AI to analyze ingredient lists from product images, detect harmful substances, and provide safety recommendations.
 
@@ -9,7 +9,7 @@ A full-stack Progressive Web App that uses AI to analyze ingredient lists from p
 - **Multi-language Support**: Automatic language detection and translation to English
 - **AI-Powered Analysis**: Google AI analyzes ingredients for harmful substances including:
   - Carcinogens
-  - Neurotoxins  
+  - Neurotoxins
   - Hormone disruptors
   - Allergens
   - Overuse concerns
@@ -23,6 +23,11 @@ A full-stack Progressive Web App that uses AI to analyze ingredient lists from p
 - **Authentication**: Secure JWT-based user accounts
 - **Real-time Analysis**: Live progress updates during processing
 - **Optimized Performance**: React memoization and lazy loading
+
+## 🌟 Future Features
+- **Image storage** - store ingredient image with the analysis
+- **Edit analysis** - edit and update the analysis name with product name
+- **Mobile apk** - mobile apk for the frontend
 
 ## Tech Stack
 
@@ -53,8 +58,8 @@ Before running this project, ensure you have:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd ai-ingredient-analyzer
+   git clone git@github.com:Al-Amin-Khan-Shakil/tox-scan-ai.git
+   cd tox-scan-ai
    ```
 
 2. **Install dependencies**
@@ -73,18 +78,18 @@ Before running this project, ensure you have:
    ```bash
    cp .env.example .env
    ```
-   
+
    Edit `.env` with your settings:
    ```env
    DB_USER=your_db_user
    DB_HOST=localhost
-   DB_NAME=ingredient_analyzer
+   DB_NAME=your_db_name
    DB_PASSWORD=your_db_password
    DB_PORT=5432
-   
+
    JWT_SECRET=your-super-secret-jwt-key
    GOOGLE_AI_API_KEY=your_google_ai_api_key
-   
+
    PORT=3001
    NODE_ENV=development
    FRONTEND_URL=http://localhost:5173
@@ -94,7 +99,7 @@ Before running this project, ensure you have:
    ```bash
    # Development mode (starts both frontend and backend)
    npm run dev
-   
+
    # Or run separately:
    npm run dev:client  # Frontend only
    npm run dev:server  # Backend only
@@ -105,37 +110,6 @@ Before running this project, ensure you have:
    - Backend API: http://localhost:3001
    - Health check: http://localhost:3001/api/health
 
-## Database Schema
-
-The application uses PostgreSQL with the following tables:
-
-### Users Table
-```sql
-CREATE TABLE users (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-### Analyses Table
-```sql
-CREATE TABLE analyses (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  original_text TEXT NOT NULL,
-  translated_text TEXT,
-  analysis TEXT NOT NULL,
-  recommendations TEXT NOT NULL,
-  risk_level VARCHAR(10) CHECK (risk_level IN ('low', 'medium', 'high')),
-  image_url VARCHAR(500),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-```
 
 ## API Endpoints
 
@@ -202,9 +176,22 @@ The application automatically creates tables on startup. For production, conside
 4. Add tests if applicable
 5. Submit a pull request
 
+## ✍️ Authers
+👤 **Al Amin Khan Shakil**
+
+- GitHub: [Al Amin Khan Shakil](https://github.com/Al-Amin-Khan-Shakil)
+- Twitter: [Al Amin Khan Shakil](https://twitter.com/AlAminKhan85004)
+- LinkedIn: [Al Amin Khan Shakil](https://www.linkedin.com/in/al-amin-khan-shakil/)
+
+## 🙏 Acknowledgments
+
+- **Google AI** for providing the Gemini API
+- **React Team** for the amazing frontend framework
+- **Tailwind CSS** for the utility-first styling approach
+
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Support
 

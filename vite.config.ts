@@ -2,36 +2,38 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      strategies: 'generateSW',
+      devOptions: {
+        enabled: true // Enables service worker in development
+      },
+      includeAssets: ['m-logo.png'],
       manifest: {
-        name: 'AI Ingredient Analyzer',
-        short_name: 'IngredientAI',
-        description: 'Analyze ingredients with AI to detect harmful substances',
+        name: 'ToxScan AI',
+        short_name: 'ToxScan AI',
+        description: 'Analyze ingredients with AI to detect harmful substances in food, cosmetics, and household products',
         theme_color: '#14B8A6',
-        background_color: '#0F172A',
+        background_color: '#ffffff',
         display: 'standalone',
-        orientation: 'portrait',
         scope: '/',
         start_url: '/',
         icons: [
           {
-            src: 'pwa-192x192.png',
+            src: '/m-logo.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'pwa-512x512.png',
+            src: '/m-logo.png',
             sizes: '512x512',
             type: 'image/png'
           },
           {
-            src: 'pwa-512x512.png',
+            src: '/m-logo.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
@@ -39,16 +41,16 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        globPatterns: ['**/*.{js,jsx,ts,tsx,css,html,png,svg}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/api\.google\.com\/.*/i,
-            handler: 'CacheFirst',
+            urlPattern: /^https:\/\/generativelanguage\.googleapis\.com\/.*/i,
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'google-api-cache',
               expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 365 days
+                maxEntries: 50,
+                maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
               },
               cacheableResponse: {
                 statuses: [0, 200]
@@ -60,12 +62,12 @@ export default defineConfig({
     })
   ],
   optimizeDeps: {
-    exclude: ['lucide-react'],
+    exclude: ['lucide-react']
   },
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target:'https://toxscan-ai.onrender.com',
         changeOrigin: true
       }
     }

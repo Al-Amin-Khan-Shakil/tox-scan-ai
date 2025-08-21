@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Camera, 
-  Shield, 
-  Zap, 
-  Globe, 
-  CheckCircle, 
+import {
+  Camera,
+  Shield,
+  Zap,
+  Globe,
+  CheckCircle,
   ArrowRight,
   Sparkles,
   Eye,
@@ -59,7 +59,7 @@ const LandingPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-20 pb-32">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-900/20 via-purple-900/20 to-secondary-900/20"></div>
@@ -73,23 +73,23 @@ const LandingPage: React.FC = () => {
             >
               <div className="flex justify-center">
                 <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-primary/20 border border-primary-500/30">
-                  <Sparkles className="h-4 w-4 text-primary-400 mr-2" />
-                  <span className="text-primary-300 text-sm font-medium">AI-Powered Ingredient Analysis</span>
+                  <Sparkles className="h-4 w-4 text-accent-100 mr-2" />
+                  <span className="text-primary-100 text-sm font-medium">Powered By Gemini AI</span>
                 </div>
               </div>
-              
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary-100 leading-tight">
                 Protect Your Health with
-                <span className="block bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400 bg-clip-text text-transparent">
+                <span className="block bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-100 bg-clip-text text-transparent">
                   AI-Powered Analysis
                 </span>
               </h1>
-              
+
               <p className="max-w-3xl mx-auto text-xl md:text-2xl text-white/70 leading-relaxed">
-                Upload ingredient lists from food, cosmetics, or household products. 
+                Upload ingredient lists from food, cosmetics, or household products.
                 Our AI instantly identifies harmful substances and provides safety recommendations.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
                 <Link
                   to={isAuthenticated ? "/analysis" : "/register"}
@@ -98,7 +98,7 @@ const LandingPage: React.FC = () => {
                   <span>Start Analyzing Now</span>
                   <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
                 </Link>
-                
+
                 <Link
                   to="#features"
                   className="px-8 py-4 backdrop-blur-md bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-white/20 hover:border-white/30 transition-all duration-300"
@@ -153,7 +153,7 @@ const LandingPage: React.FC = () => {
                 <span className="block text-primary-400">Your Safety</span>
               </h2>
               <p className="max-w-3xl mx-auto text-xl text-white/70">
-                Advanced AI technology combined with comprehensive safety databases 
+                Advanced AI technology combined with comprehensive safety databases
                 to protect you and your family from harmful ingredients.
               </p>
             </motion.div>
@@ -207,16 +207,16 @@ const LandingPage: React.FC = () => {
                     <AlertTriangle className="h-8 w-8 text-white" />
                   </div>
                 </div>
-                
+
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
                   Don't Risk Your Health
                 </h2>
-                
+
                 <p className="text-xl text-white/70 mb-8 leading-relaxed">
-                  Join thousands of users who trust our AI to keep them safe. 
+                  Join thousands of users who trust our AI to keep them safe.
                   Start analyzing your products today and make informed decisions about what you use.
                 </p>
-                
+
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
                     to={isAuthenticated ? "/analysis" : "/register"}

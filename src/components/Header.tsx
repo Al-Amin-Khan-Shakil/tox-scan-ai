@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Atom, Menu, X, User, LogOut } from 'lucide-react';
+import { Microscope, Menu, X, User, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -22,15 +22,15 @@ const Header: React.FC = React.memo(() => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             {/* Logo */}
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="flex items-center space-x-2 group"
             >
               <div className="p-2 rounded-lg bg-gradient-primary group-hover:scale-110 transition-transform duration-200">
-                <Atom className="h-6 w-6 text-white" />
+                <Microscope className="h-6 w-6 text-white" />
               </div>
               <span className="font-bold text-xl text-white">
-                Ingredient<span className="text-primary-400">AI</span>
+                ToxScan<span className="text-primary-400">AI</span>
               </span>
             </Link>
 
@@ -41,8 +41,8 @@ const Header: React.FC = React.memo(() => {
                   <Link
                     to="/dashboard"
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                      isActive('/dashboard') 
-                        ? 'text-primary-400 bg-white/10' 
+                      isActive('/dashboard')
+                        ? 'text-primary-400 bg-white/10'
                         : 'text-white hover:text-primary-400 hover:bg-white/5'
                     }`}
                   >
@@ -51,8 +51,8 @@ const Header: React.FC = React.memo(() => {
                   <Link
                     to="/analysis"
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                      isActive('/analysis') 
-                        ? 'text-primary-400 bg-white/10' 
+                      isActive('/analysis')
+                        ? 'text-primary-400 bg-white/10'
                         : 'text-white hover:text-primary-400 hover:bg-white/5'
                     }`}
                   >
@@ -61,8 +61,8 @@ const Header: React.FC = React.memo(() => {
                   <Link
                     to="/recent-analysis"
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                      isActive('/recent-analysis') 
-                        ? 'text-primary-400 bg-white/10' 
+                      isActive('/recent-analysis')
+                        ? 'text-primary-400 bg-white/10'
                         : 'text-white hover:text-primary-400 hover:bg-white/5'
                     }`}
                   >
@@ -133,8 +133,8 @@ const Header: React.FC = React.memo(() => {
                     to="/dashboard"
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                      isActive('/dashboard') 
-                        ? 'text-primary-400 bg-white/10' 
+                      isActive('/dashboard')
+                        ? 'text-primary-400 bg-white/10'
                         : 'text-white hover:text-primary-400 hover:bg-white/5'
                     }`}
                   >
@@ -144,8 +144,8 @@ const Header: React.FC = React.memo(() => {
                     to="/analysis"
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                      isActive('/analysis') 
-                        ? 'text-primary-400 bg-white/10' 
+                      isActive('/analysis')
+                        ? 'text-primary-400 bg-white/10'
                         : 'text-white hover:text-primary-400 hover:bg-white/5'
                     }`}
                   >
@@ -155,8 +155,8 @@ const Header: React.FC = React.memo(() => {
                     to="/recent-analysis"
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                      isActive('/recent-analysis') 
-                        ? 'text-primary-400 bg-white/10' 
+                      isActive('/recent-analysis')
+                        ? 'text-primary-400 bg-white/10'
                         : 'text-white hover:text-primary-400 hover:bg-white/5'
                     }`}
                   >

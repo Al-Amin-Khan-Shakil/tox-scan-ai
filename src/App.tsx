@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { AnalysisProvider } from './contexts/AnalysisContext';
 import LoadingSpinner from './components/LoadingSpinner';
 import Header from './components/Header';
@@ -15,6 +15,21 @@ const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const Profile = lazy(() => import('./pages/Profile'));
 
+// Protected Route component
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -25,13 +40,48 @@ function App() {
             <Suspense fallback={<LoadingSpinner />}>
               <Routes>
                 <Route path="/" element={<LandingPage />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/analysis" element={<Analysis />} />
-                <Route path="/recent-analysis" element={<RecentAnalysis />} />
-                <Route path="/analysis-details/:id" element={<AnalysisDetails />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/analysis"
+                  element={
+                    <ProtectedRoute>
+                      <Analysis />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/recent-analysis"
+                  element={
+                    <ProtectedRoute>
+                      <RecentAnalysis />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/analysis-details/:id"
+                  element={
+                    <ProtectedRoute>
+                      <AnalysisDetails />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
               </Routes>
             </Suspense>
           </div>

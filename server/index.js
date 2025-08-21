@@ -21,6 +21,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Serve static files from the Vite build output
+app.use(express.static(path.join(__dirname, '../dist')));
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: {
@@ -29,14 +32,16 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'"],
       scriptSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "blob:", "https:"],
-      connectSrc: ["'self'", "https://generativelanguage.googleapis.com"],
+      connectSrc: ["'self'", "https://generativelanguage.googleapis.com", process.env.FRONTEND_URL || "https://toxscan-ai.onrender.com"],
+      workerSrc: ["'self'", "blob:"],
     },
   },
+  crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL 
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.FRONTEND_URL || 'https://toxscan-ai.onrender.com'
     : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true
 }));
@@ -57,6 +62,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Serve index.html for all unmatched routes (for client-side routing)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);
@@ -66,17 +76,12 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
-
 // Initialize database and start server
 const startServer = async () => {
   try {
     await initDatabase();
     console.log('✅ Database initialized successfully');
-    
+
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Health check: http://localhost:${PORT}/api/health`);

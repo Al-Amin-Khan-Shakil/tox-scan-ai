@@ -82,20 +82,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-20 pb-12 relative">
-      <div className="absolute top-6 right-4 xl:right-20 z-50">
-        <a
-          href="https://bolt.new/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="cursor-pointer"
-        >
-          <img
-            src={BoltBadge}
-            alt="Bolt Badge"
-            className="h-16 w-16 md:h-24 md:w-24"
-          />
-        </a>
-      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Welcome Section */}
         <motion.div

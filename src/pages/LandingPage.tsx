@@ -61,20 +61,6 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen relative">
-      <div className="absolute top-6 right-4 xl:right-20 z-50">
-        <a
-          href="https://bolt.new/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="cursor-pointer"
-        >
-          <img
-            src={BoltBadge}
-            alt="Bolt Badge"
-            className="h-16 w-16 md:h-24 md:w-24"
-          />
-        </a>
-      </div>
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-20 pb-32">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-900/20 via-purple-900/20 to-secondary-900/20"></div>

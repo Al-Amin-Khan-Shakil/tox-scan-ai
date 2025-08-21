@@ -452,7 +452,7 @@ const Analysis: React.FC = () => {
                 <h3 className="text-lg font-semibold text-white">Usage Recommendations</h3>
               </div>
               <div className="prose prose-invert max-w-none">
-                <ReactMarkdown
+                <ReactMarkdown 
                   className="text-white/80"
                   components={{
                     h1: ({children}) => <h1 className="text-2xl font-bold text-white mb-4">{children}</h1>,
@@ -471,7 +471,7 @@ const Analysis: React.FC = () => {
                     strong: ({children}) => <strong className="text-white font-semibold">{children}</strong>,
                   }}
                 >
-                  {getFilteredAnalysis(currentAnalysis.analysis)}
+                  {currentAnalysis.recommendations}
                 </ReactMarkdown>
               </div>
             </GlassCard>
